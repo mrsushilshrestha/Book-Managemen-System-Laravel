@@ -30,9 +30,11 @@
     <div class="mb-3">
     <label class="form-label">Category</label>
     <select name="category_id" class="form-control">
-        <option value="{{ old('category_id') }}">Select a Category</option>
+        <option value="">Select a Category</option>
         @foreach ($categories as $category)
             <option value="{{ $category->id }}">{{ $category->name }}</option>
+        
+            
         @endforeach
     </select>
     </div>

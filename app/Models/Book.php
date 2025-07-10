@@ -38,10 +38,10 @@ class Book extends Model
      */
 
     // Scope: get books published after a certain year
-    public function scopePublishedAfter($query, $year)
-    {
-        return $query->where('published_year', '>', $year);
-    }
+    // public function scopePublishedAfter($query, $year)
+    // {
+    //     return $query->where('published_year', '>', $year);
+    // }
 
     /**
      * Accessors & Mutators

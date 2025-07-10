@@ -33,6 +33,25 @@
             background-color: #222f3e;
             color: #d1d8e0;
         }
+        .btn-group-sm>.btn, .btn-sm {
+        --bs-btn-padding-y: 0.25rem;
+        --bs-btn-padding-x: 0.4rem;
+        --bs-btn-font-size: 0.875rem;
+        --bs-btn-border-radius: var(--bs-border-radius-sm);
+    }
+
+        .btn-link.nav-link {
+            padding: 0.375rem 0.75rem;
+            margin: 0;
+            border: none;
+            background: none;
+            color: #cbd5e1;
+            cursor: pointer;
+        }
+
+        .btn-link.nav-link:hover {
+            color: #ffd700;
+        }
     </style>
 </head>
 <body>
@@ -52,6 +71,13 @@
                         <li class="nav-item">
                             <a class="nav-link" href="#">Hello, {{ auth()->user()->name }}</a>
                         </li>
+
+                        @if(auth()->user()->role === 'admin')
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('categories.index') }}">Categories</a>
+                            </li>
+                        @endif
+
                         <li class="nav-item">
                             <form action="{{ route('logout') }}" method="POST" class="d-inline">
                                 @csrf
@@ -71,7 +97,6 @@
     <footer class="py-3 mt-5">
         <div class="container text-center">
             <small>© {{ date('Y') }} Your Book Management System. All rights reserved.</small>
-            
         </div>
     </footer>
 

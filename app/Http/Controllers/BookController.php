@@ -15,6 +15,7 @@ class BookController extends Controller
 
     if ($request->filled('author')) {
         $query->where('author', 'like', '%' . $request->author . '%');
+        // $query->where('author',$request->author);
     }
 
     if ($request->filled('published_year')) {
@@ -78,7 +79,10 @@ class BookController extends Controller
         // if (auth()->id() !== $book->user_id && auth()->user()->role !== 'admin') {
         //     abort(403);
         // }
-        if (auth()->user()->role !== 'user' && auth()->user()->role !== 'admin') {
+        // if (auth()->user()->role !== 'user' && auth()->user()->role !== 'admin') {
+        //     abort(403);
+        // }
+        if (auth()->id() !== $book->user_id && !auth()->user()->isAdmin()) {
             abort(403);
         }
 
@@ -88,7 +92,10 @@ class BookController extends Controller
 
     public function update(Request $request, Book $book)
     {   
-        if (auth()->id() !== $book->user_id && auth()->user()->role !== 'admin') {
+        // if (auth()->id() !== $book->user_id && auth()->user()->role !== 'admin') {
+        //     abort(403);
+        // }
+        if (auth()->id() !== $book->user_id && !auth()->user()->isAdmin()) {
             abort(403);
         }
         $validated = $request->validate([
@@ -112,10 +119,12 @@ class BookController extends Controller
 
     public function destroy(Book $book)
     {   
-        if (auth()->id() !== $book->user_id && auth()->user()->role !== 'admin') {
-            // return redirect()->route('books.index');
+        // if (auth()->id() !== $book->user_id && auth()->user()->role !== 'admin') {
+        //     // return redirect()->route('books.index');
+        //     abort(403);
+        // }
+        if (auth()->id() !== $book->user_id && !auth()->user()->isAdmin()) {
             abort(403);
-
         }
 
         $book->delete();

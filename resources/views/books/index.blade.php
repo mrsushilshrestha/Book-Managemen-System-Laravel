@@ -56,10 +56,12 @@
                 <p><strong>Published:</strong> <span class="text-secondary">{{ $book->published_year }}</span></p>
                 <p><strong>Category:</strong> <span class="text-secondary">{{ $book->category->name ?? 'N/A' }}</span></p>
                 <p><strong>Posted by:</strong> <span class="text-secondary">{{ $book->user->name ?? 'Unknown' }}</span></p>
+                <p><strong>Description: </strong><span class="text-secondary">{{ $book->description ?? 'No Any Description '}}</span></p>
+                <!-- <pre>{{ var_dump($book->description) }}</pre> -->
 
                 {{-- ✏️🗑️ Edit/Delete Buttons (Only for Owner) --}}
                 @auth
-                    @if(auth()->user()->id === $book->user_id)
+                @if(auth()->user()->id === $book->user_id || auth()->user()->isAdmin())
                         <div class="mt-auto d-flex justify-content-between">
                             <a href="{{ route('books.edit', $book->id) }}" class="btn btn-sm btn-warning shadow-sm" style="width: 48%;">✏️ Edit</a>
                             <form action="{{ route('books.destroy', $book->id) }}" method="POST" class="d-inline" style="width: 48%;">
