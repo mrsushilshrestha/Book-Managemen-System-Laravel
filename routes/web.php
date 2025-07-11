@@ -44,9 +44,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('/books/{book}', [BookController::class, 'destroy'])->name('books.destroy');
 });
 
-// 🔒 Only Admins can manage categories
+// Only Admins can manage categories
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::resource('categories', CategoryController::class)->except(['show']);
+    Route::get('/admin/dashboard', [BookController::class, 'dashboard'])->name('admin.dashboard');
+
 });
 
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');

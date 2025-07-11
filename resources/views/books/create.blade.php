@@ -3,7 +3,7 @@
 @section('content')
 <h2>Add New Book</h2>
 
-@if ($errors->any())
+<!-- @if ($errors->any())
     <div class="alert alert-danger">
         <ul class="mb-0">
             @foreach ($errors->all() as $error)
@@ -11,36 +11,50 @@
             @endforeach
         </ul>
     </div>
-@endif
+@endif -->
 
 <form action="{{ route('books.store') }}" method="POST"  enctype="multipart/form-data">
     @csrf
     <div class="mb-3">
         <label class="form-label">Title</label>
-        <input type="text" name="title" class="form-control" value="{{ old('title') }}"required>
+        <input type="text" name="title" class="form-control" value="{{ old('title') }}">
+        @error('title')
+        <small class="text-danger">{{ $message }}</small>
+        @enderror
     </div>
+
     <div class="mb-3">
         <label class="form-label">Author</label>
-        <input type="text" name="author" class="form-control" value="{{ old('author') }}" required>
+        <input type="text" name="author" class="form-control" value="{{ old('author') }}">
+        @error('author')
+        <small class="text-danger">{{ $message }}</small>
+        @enderror
     </div>
+
     <div class="mb-3">
         <label class="form-label">ISBN</label>
-        <input type="text" name="isbn" class="form-control" value="{{ old('isbn') }}" required>
+        <input type="text" name="isbn" class="form-control" value="{{ old('isbn') }}">
+        @error('isbn')
+        <small class="text-danger">{{ $message }}</small>
+        @enderror
     </div>
+
     <div class="mb-3">
     <label class="form-label">Category</label>
     <select name="category_id" class="form-control">
         <option value="">Select a Category</option>
         @foreach ($categories as $category)
             <option value="{{ $category->id }}">{{ $category->name }}</option>
-        
-            
         @endforeach
     </select>
     </div>
+
     <div class="mb-3">
         <label class="form-label">Published Year</label>
-        <input type="number" name="published_year" class="form-control" value="{{ old('published_year') }}" required>
+        <input type="number" name="published_year" class="form-control" value="{{ old('published_year') }}" >
+        @error('published_year')
+        <small class="text-danger">{{ $message }}</small>
+        @enderror
     </div>
     
     <div class="mb-3">

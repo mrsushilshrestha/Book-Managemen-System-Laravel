@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
+use App\Models\user;
 use App\Models\Category;
 use Illuminate\Http\Request;
 
@@ -55,10 +56,21 @@ class BookController extends Controller
             'title' => 'required|string|max:255',
             'author' => 'required|string',
             'isbn' => 'required|unique:books,isbn',
-            'published_year' => 'nullable|numeric',
+            'published_year' => 'required|nullable|numeric',
             'description' => 'nullable|string',
             'category_id' => 'nullable|exists:categories,id',
-            'cover_image_path' => 'nullable|image|max:2048',
+            // 'cover_image_path' => 'nullable|image|max:2048',
+            'cover_image_path' => 'nullable|image|mimes:jpeg,jpg,png|max:2048',
+
+        ],
+        [
+        'title.required' => 'The book title is required.',
+        'author.required' => 'Please enter the author name.',
+        'isbn.required' => 'ISBN is required.',
+        'isbn.unique' => 'This ISBN already exists.',
+        'cover_image_path.image' => 'The cover must be an image.',
+        'cover_image_path.max' => 'Image must not be larger than 2MB.',
+        // 'cover_image_path.mimes'=> 'We only Accept jpeg,jpg,png File Format.'
         ]);
         
         if ($request->hasFile('cover_image_path')) {
@@ -129,6 +141,20 @@ class BookController extends Controller
 
         $book->delete();
         return redirect()->route('books.index')->with('success', 'Book deleted successfully.');
+    }
+
+
+
+    //admin 
+    public function dashboard()
+    {
+        $userCount = User::count();
+        $bookCount = Book::count();
+
+        // Fetch all books with their relations
+        $books = Book::with(['user', 'category'])->latest()->get();
+
+        return view('admin.dashboard', compact('userCount', 'bookCount', 'books'));
     }
 
 }

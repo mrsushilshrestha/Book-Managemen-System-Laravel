@@ -69,10 +69,13 @@
                         <li class="nav-item"><a class="nav-link" href="{{ route('register') }}">Register</a></li>
                     @else
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Hello, {{ auth()->user()->name }}</a>
+                            <a class="nav-link" href="{{ route('books.index') }}">Hello, {{ auth()->user()->name }}</a>
                         </li>
 
                         @if(auth()->user()->role === 'admin')
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('admin.dashboard') }}">Dashboard</a>
+                            </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('categories.index') }}">Categories</a>
                             </li>
