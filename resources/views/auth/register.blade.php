@@ -60,7 +60,7 @@
                 @enderror
             </div>
 
-            <div class="mb-3">
+            <!-- <div class="mb-3">
                 <label for="role" class="form-label fw-semibold">Select Role</label>
                 <select
                     id="role"
@@ -75,7 +75,9 @@
                 @error('role')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
-            </div>
+            </div> -->
+            <input type="hidden" name="role" value="user">
+
 
             <button type="submit" class="btn btn-success w-100">Register</button>
         </form>

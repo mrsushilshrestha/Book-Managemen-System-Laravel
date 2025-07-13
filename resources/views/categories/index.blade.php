@@ -3,7 +3,7 @@
 @section('content')
 <h2 class="mb-4">📚 Category Management</h2>
 
-<a href="{{ route('categories.create') }}" class="btn btn-primary mb-3">➕ Add Category</a>
+<a href="{{ route('admin.categories.create') }}" class="btn btn-primary mb-3">➕ Add Category</a>
 
 @if(session('success'))
     <div class="alert alert-success">{{ session('success') }}</div>
@@ -25,8 +25,8 @@
                 <td>{{ $category->name }}</td>
                 <td>{{ $category->description }}</td>
                 <td>
-                    <a href="{{ route('categories.edit', $category->id) }}" class="btn btn-sm btn-warning">✏️ Edit</a>
-                    <form action="{{ route('categories.destroy', $category->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure?')">
+                    <a href="{{ route('admin.categories.edit', $category->id) }}" class="btn btn-sm btn-warning">✏️ Edit</a>
+                    <form action="{{ route('admin.categories.destroy', $category->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure?')">
                         @csrf
                         @method('DELETE')
                         <button class="btn btn-sm btn-danger">🗑️ Delete</button>

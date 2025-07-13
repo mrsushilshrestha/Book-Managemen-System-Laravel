@@ -4,50 +4,37 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\admin\AdminController;
+use App\Http\Controllers\Admin\UserController;
 
-
-
-
-// Route::get('/', function () {
-//     return view('welcome');
-// });
-
-
-// Route::resource('books', BookController::class);
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+// use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 
 
 Route::get('/', [BookController::class, 'index'])->name('books.index');
-// Route::get('/books/{book}', [BookController::class, 'show'])->name('books.show');
-
-// Route::middleware(['auth', 'admin'])->group(function () {
-//     Route::get('/books/create', [BookController::class, 'create'])->name('books.create');
-//     Route::post('/books', [BookController::class, 'store'])->name('books.store');
-//     Route::get('/books/{book}/edit', [BookController::class, 'edit'])->name('books.edit');
-//     Route::put('/books/{book}', [BookController::class, 'update'])->name('books.update');
-//     Route::delete('/books/{book}', [BookController::class, 'destroy'])->name('books.destroy');
-// });
 
 // Route::middleware('auth')->group(function () {
 //     Route::get('/books/create', [BookController::class, 'create'])->name('books.create');
 //     Route::post('/books', [BookController::class, 'store'])->name('books.store');
-
 //     Route::get('/books/{book}/edit', [BookController::class, 'edit'])->name('books.edit');
 //     Route::put('/books/{book}', [BookController::class, 'update'])->name('books.update');
 //     Route::delete('/books/{book}', [BookController::class, 'destroy'])->name('books.destroy');
 // });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/books/create', [BookController::class, 'create'])->name('books.create');
-    Route::post('/books', [BookController::class, 'store'])->name('books.store');
-    Route::get('/books/{book}/edit', [BookController::class, 'edit'])->name('books.edit');
-    Route::put('/books/{book}', [BookController::class, 'update'])->name('books.update');
-    Route::delete('/books/{book}', [BookController::class, 'destroy'])->name('books.destroy');
+    Route::resource('books', BookController::class)->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
 });
 
-// Only Admins can manage categories
-Route::middleware(['auth', 'admin'])->group(function () {
-    Route::resource('categories', CategoryController::class)->except(['show']);
-    Route::get('/admin/dashboard', [BookController::class, 'dashboard'])->name('admin.dashboard');
+// Authenticated Admin Users with Active Status
+Route::middleware(['auth', 'check.status', 'admin'])->prefix('admin')->name('admin.')->group(function () {  
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+
+    // Manage Users (admin can create/edit/delete users)
+    Route::resource('users', UserController::class)->except(['show']);
+
+    // Manage Categories (admin can create/edit/delete categories)
+    Route::resource('categories', CategoryController::class)->except(['show']); 
 
 });
 
@@ -59,3 +46,26 @@ Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('regi
 Route::post('/register', [AuthController::class, 'register']);
 
 
+// ✅ Email verification notice (after register)
+Route::get('/email/verify', function () {
+    return view('auth.verify_code', [
+        'email' => auth()->user()->email
+    ]);
+})->middleware('auth')->name('verification.notice');
+
+
+Route::post('/register/complete', [AuthController::class, 'completeRegister'])->name('register.complete');
+
+
+
+// ✅ Handle the email verification link
+Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+    $request->fulfill(); // Mark email as verified
+    return redirect('/'); // or redirect wherever you want
+})->middleware(['auth', 'signed'])->name('verification.verify');
+
+// ✅ Resend email verification link
+Route::post('/email/verification-notification', function (Request $request) {
+    $request->user()->sendEmailVerificationNotification();
+    return back()->with('message', 'Verification link sent!');
+})->middleware(['auth', 'throttle:6,1'])->name('verification.send');

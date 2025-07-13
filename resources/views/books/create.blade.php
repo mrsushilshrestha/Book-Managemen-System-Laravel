@@ -51,6 +51,7 @@
 
     <div class="mb-3">
         <label class="form-label">Published Year</label>
+        <!-- <input type="datetime-local" name="published_year" class="form-control" value="{{ old('published_year') }}" > -->
         <input type="number" name="published_year" class="form-control" value="{{ old('published_year') }}" >
         @error('published_year')
         <small class="text-danger">{{ $message }}</small>

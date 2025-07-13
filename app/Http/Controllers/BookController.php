@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
-use App\Models\user;
+use App\Models\User;
 use App\Models\Category;
 use Illuminate\Http\Request;
 
@@ -145,16 +145,5 @@ class BookController extends Controller
 
 
 
-    //admin 
-    public function dashboard()
-    {
-        $userCount = User::count();
-        $bookCount = Book::count();
-
-        // Fetch all books with their relations
-        $books = Book::with(['user', 'category'])->latest()->get();
-
-        return view('admin.dashboard', compact('userCount', 'bookCount', 'books'));
-    }
 
 }

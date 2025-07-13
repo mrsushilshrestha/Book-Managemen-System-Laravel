@@ -29,7 +29,7 @@ class CategoryController extends Controller
         ]);
 
         Category::create($request->only('name', 'description'));
-        return redirect()->route('categories.index')->with('success', 'Category created.');
+        return redirect()->route('admin.categories.index')->with('success', 'Category created.');
     }
 
     // Show edit form
@@ -47,14 +47,14 @@ class CategoryController extends Controller
         ]);
 
         $category->update($request->only('name', 'description'));
-        return redirect()->route('categories.index')->with('success', 'Category updated.');
+        return redirect()->route('admin.categories.index')->with('success', 'Category updated.');
     }
 
     // Delete category
     public function destroy(Category $category)
     {
         $category->delete();
-        return redirect()->route('categories.index')->with('success', 'Category deleted.');
+        return redirect()->route('admin.categories.index')->with('success', 'Category deleted.');
     }
 }
 
